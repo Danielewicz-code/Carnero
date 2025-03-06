@@ -1,0 +1,223 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Arial", sans-serif;
+}
+
+/* Dark Background & Cold UI */
+body {
+    width: 300px;
+    height: 400px;
+    background: #121212;
+    color: #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    align-items: right;
+    padding: 20px;
+    z-index: 9999;
+    overflow-y: auto;
+}
+
+/* Container */
+.container {
+    width: 100%;
+    text-align: center;
+}
+
+/* Title */
+h2 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #bbdefb;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+}
+
+/* NEW SIMPLIFIED INPUT STYLE */
+.input-container {
+    position: relative;
+    margin: 15px 0 25px;
+    width: 100%;
+}
+
+.input-field {
+    width: 100%;
+    padding: 10px 5px;
+    border: none;
+    border-bottom: 2px solid #444;
+    background: transparent;
+    color: #e0e0e0;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: #1976d2;
+    box-shadow: 0 1px 8px rgba(25, 118, 210, 0.3);
+}
+
+.input-label {
+    position: absolute;
+    top: 10px;
+    left: 5px;
+    font-size: 16px;
+    color: #888;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.input-field:focus ~ .input-label,
+.input-field:valid ~ .input-label {
+    top: -20px;
+    font-size: 14px;
+    color: #1976d2;
+    letter-spacing: 0.5px;
+}
+
+/* Tooltip for reminder syntax */
+.tooltip {
+    position: absolute;
+    top: -20px;
+    right: 0;
+    background: #333;
+    color: #fff;
+    font-size: 12px;
+    padding: 3px 8px;
+    border-radius: 3px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+.input-container:hover .tooltip {
+    opacity: 1;
+}
+
+/* Button */
+button {
+    width: 100%;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    background: linear-gradient(135deg, #0d47a1, #1976d2);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #1565c0, #1e88e5);
+}
+
+#clearCompleted {
+    background: linear-gradient(135deg, #455a64, #607d8b);
+}
+
+#clearCompleted:hover {
+    background: linear-gradient(135deg, #546e7a, #78909c);
+}
+
+#focusMode {
+    background: linear-gradient(135deg, #2e7d32, #43a047);
+}
+
+#focusMode:hover {
+    background: linear-gradient(135deg, #388e3c, #4caf50);
+}
+
+/* Task List */
+ul {
+    list-style: none;
+    width: 100%;
+    padding: 0;
+    margin-top: 10px;
+}
+
+li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #1e1e1e;
+    margin: 6px 0;
+    padding: 10px;
+    border-radius: 5px;
+    border-left: 3px solid #1976d2;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+/* Task text */
+.task-text {
+    flex-grow: 1;
+    text-align: left;
+    margin: 0 8px;
+    transition: all 0.3s ease;
+    word-break: break-word;
+}
+
+/* Completed task styling */
+.task-completed {
+    text-decoration: line-through;
+    color: #888;
+}
+
+/* Task checkbox */
+.task-checkbox {
+    margin-right: 5px;
+    accent-color: #1976d2;
+}
+
+/* Delete button */
+.delete-btn {
+    background: transparent;
+    border: none;
+    color: #ff5252;
+    cursor: pointer;
+    font-size: 14px;
+    width: auto;
+    padding: 0 5px;
+    transition: all 0.2s ease;
+}
+
+.delete-btn:hover {
+    color: #d32f2f;
+    transform: scale(1.1);
+}
+
+/* Reminder time */
+.reminder-time {
+    font-size: 0.8em;
+    color: #bbdefb;
+    margin-right: 8px;
+    white-space: nowrap;
+}
+
+/* Subtle Shadows */
+input:focus, button:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(25, 118, 210, 0.5);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* Focus Timer */
+#focusTimer {
+    font-family: monospace;
+    font-size: 20px;
+    color: #4caf50;
+    margin: 10px 0;
+}
