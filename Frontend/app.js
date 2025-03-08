@@ -39,6 +39,11 @@ document.addEventListener("DOMContentLoaded", function () {
     function addTask() {
       let taskText = taskInput.value.trim();
       if (!taskText) return;
+
+      if (taskText.length > 85) {
+        alert("Tasks Cannot Exceed 85 Characters.");
+        return;
+      }
   
       // Generate a unique task ID
       const taskId = "task-" + Date.now() + "-" + Math.floor(Math.random() * 1000);
@@ -52,6 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
         scheduleAlarm(taskId, alarmTime, taskText);
       }
 
+      // extract priority
       let taskPriority = "!";
       if (taskText.startsWith("!!!")) {
         taskPriority = "!!!"
@@ -189,9 +195,26 @@ document.addEventListener("DOMContentLoaded", function () {
             taskId: li.dataset.taskId
           });
         });
+
+        // sort by priority inmmediately for the ui
+        tasks.sort((a, b) => {
+          const priorityOrder = {"!!!": 3, "!!": 2, "!": 1}
+          return priorityOrder[b.priority] - priorityOrder[a.priority];
+        });
+
         // Also save to chrome.storage.local
         chrome.storage.local.set({ tasks }, () => {
-          console.log("Tasks successfully saved to chrome.storage.local", tasks)
+          console.log("Tasks successfully saved to chrome.storage.local", tasks);
+
+          displaySortedTasks(tasks);
+        });
+    }
+
+
+    function displaySortedTasks(sortedTasks) {
+      taskList.innerHTML = "";
+      sortedTasks.forEach(task => {
+        createTaskElement(task.text, task.completed, task.alarmTime, task.taskId, task.priority);
         });
     }
       
