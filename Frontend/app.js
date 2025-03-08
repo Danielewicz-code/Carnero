@@ -176,9 +176,11 @@ document.addEventListener("DOMContentLoaded", function () {
   
     // Listen for messages (e.g., completeTask notifications from background.js)
     chrome.runtime.onMessage.addListener((message, _, sendResponse) => {
+      
       if (message.action === "completeTask") {
-        // Use taskId to find the specific task element
+    
         const taskItem = document.querySelector(`[data-task-id="${message.taskId}"]`);
+
         if (taskItem) {
           const checkbox = taskItem.querySelector(".task-checkbox");
           checkbox.checked = true;
@@ -187,10 +189,11 @@ document.addEventListener("DOMContentLoaded", function () {
           updateClearCompletedButton();
           sendResponse({ success: true });
         } else {
+          console.log("Task not found for ID:", message.taskId);
           sendResponse({ success: false, error: "Task not found" });
         }
       }
       return true;
-    });
+    });    
   });
   

@@ -4,7 +4,7 @@ chrome.alarms.onAlarm.addListener(alarm => {
       type: "basic",
       iconUrl: chrome.runtime.getURL("icons/alarm_icon.png"),
       title: "Task Reminder",
-      message: `Reminder for task: ${alarm.name}`,
+      message: `Reminder for task: ${alarm.time}`,
       requireInteraction: true,
       buttons: [
         { title: "Mark as Done ✅" }
@@ -25,6 +25,10 @@ chrome.notifications.onButtonClicked.addListener((notificationId, buttonIndex) =
         });
         chrome.storage.local.set({ tasks }, () => {
           console.log("Task updated in storage");
+
+          chrome.runtime.sendMessage({action: "completeTask", taskId: notificationId}, (Response) => {
+            console.log("message sent, response:", Response)
+          })
         });
       });
       chrome.notifications.clear(notificationId);
