@@ -14,7 +14,7 @@ body {
     color: #e0e0e0;
     display: flex;
     flex-direction: column;
-    align-items: right;
+    align-items: center;
     padding: 20px;
     z-index: 9999;
     overflow-y: auto;
@@ -36,7 +36,9 @@ h2 {
     margin-bottom: 10px;
 }
 
-/* NEW SIMPLIFIED INPUT STYLE */
+/* ───────────────────────────────────────────────────── */
+/* Input Animation with Floating Label & Underline */
+/* ───────────────────────────────────────────────────── */
 .input-container {
     position: relative;
     margin: 15px 0 25px;
@@ -51,37 +53,47 @@ h2 {
     background: transparent;
     color: #e0e0e0;
     font-size: 16px;
-    transition: all 0.3s ease;
+    transition: all 0.5s ease-in-out; /* Slower transition */
 }
 
-.input-field:focus {
-    outline: none;
-    border-color: #1976d2;
-    box-shadow: 0 1px 8px rgba(25, 118, 210, 0.3);
-}
-
-.input-label {
+/* Floating Label */
+.label {
     position: absolute;
     top: 10px;
     left: 5px;
     font-size: 16px;
     color: #888;
     pointer-events: none;
-    transition: all 0.3s ease;
+    transition: all 0.5s ease-in-out; /* Slower transition */
 }
 
-.input-field:focus ~ .input-label,
-.input-field:valid ~ .input-label {
-    top: -20px;
-    font-size: 14px;
-    color: #1976d2;
-    letter-spacing: 0.5px;
+/* Animate label when input is focused or valid */
+.input-field:focus ~ .label,
+.input-field:valid ~ .label {
+    animation: slideUp 0.5s ease-in-out forwards;
 }
 
-/* Tooltip for reminder syntax */
+/* Underline Effect */
+.underline {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    background-color: #1976d2;
+    transform: scaleX(0);
+    transition: transform 0.5s ease-in-out; /* Slower transition */
+}
+
+.input-field:focus ~ .underline,
+.input-field:valid ~ .underline {
+    transform: scaleX(1);
+}
+
+/* Tooltip for instructions */
 .tooltip {
     position: absolute;
-    top: -20px;
+    top: -25px;
     right: 0;
     background: #333;
     color: #fff;
@@ -89,7 +101,7 @@ h2 {
     padding: 3px 8px;
     border-radius: 3px;
     opacity: 0;
-    transition: opacity 0.3s;
+    transition: opacity 0.5s ease-in-out;
     pointer-events: none;
 }
 
@@ -97,7 +109,9 @@ h2 {
     opacity: 1;
 }
 
-/* Button */
+/* ───────────────────────────────────────────────────── */
+/* Buttons */
+/* ───────────────────────────────────────────────────── */
 button {
     width: 100%;
     padding: 8px;
@@ -111,22 +125,6 @@ button {
 
 button:hover {
     background: linear-gradient(135deg, #1565c0, #1e88e5);
-}
-
-#clearCompleted {
-    background: linear-gradient(135deg, #455a64, #607d8b);
-}
-
-#clearCompleted:hover {
-    background: linear-gradient(135deg, #546e7a, #78909c);
-}
-
-#focusMode {
-    background: linear-gradient(135deg, #2e7d32, #43a047);
-}
-
-#focusMode:hover {
-    background: linear-gradient(135deg, #388e3c, #4caf50);
 }
 
 /* Task List */
@@ -150,7 +148,7 @@ li {
     transition: all 0.3s ease;
 }
 
-/* Task text */
+/* Task Text */
 .task-text {
     flex-grow: 1;
     text-align: left;
@@ -159,19 +157,19 @@ li {
     word-break: break-word;
 }
 
-/* Completed task styling */
+/* Completed task */
 .task-completed {
     text-decoration: line-through;
     color: #888;
 }
 
-/* Task checkbox */
+/* Task Checkbox */
 .task-checkbox {
     margin-right: 5px;
     accent-color: #1976d2;
 }
 
-/* Delete button */
+/* Delete Button */
 .delete-btn {
     background: transparent;
     border: none;
@@ -188,7 +186,7 @@ li {
     transform: scale(1.1);
 }
 
-/* Reminder time */
+/* Reminder Time */
 .reminder-time {
     font-size: 0.8em;
     color: #bbdefb;
@@ -196,13 +194,58 @@ li {
     white-space: nowrap;
 }
 
-/* Subtle Shadows */
-input:focus, button:focus {
-    outline: none;
-    box-shadow: 0 0 10px rgba(25, 118, 210, 0.5);
+/* ───────────────────────────────────────────────────── */
+/* Button Container (For Task & Date Selection) */
+/* ───────────────────────────────────────────────────── */
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
 }
 
-/* Animations */
+/* Calendar Button */
+.date-btn {
+    background: #263238;
+    color: #bbdefb;
+    border-radius: 5px;
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.date-btn:hover {
+    background: #37474f;
+}
+
+/* Hidden Date Picker */
+#datePicker {
+    display: none;
+}
+
+/* ───────────────────────────────────────────────────── */
+/* Slower Animations */
+/* ───────────────────────────────────────────────────── */
+@keyframes slideUp {
+    from {
+        top: 10px;
+        font-size: 16px;
+        opacity: 0.5;
+    }
+    to {
+        top: -20px;
+        font-size: 14px;
+        opacity: 1;
+        color: #1976d2;
+    }
+}
+
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }

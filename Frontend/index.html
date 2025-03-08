@@ -8,16 +8,25 @@
 </head>
 <body>
     <div class="container">
-        <h2>To-Do List</h2>
+        <h2>Carnero</h2>
         <br>
         <div class="input-container">
-            <input type="text" autocomplete="off" id="taskInput" class="input-field">
-            <label for="taskInput" class="input-label">Enter Task</label>
-            <div class="tooltip">Use "@HH:MM" for reminders | Use "!!!, !!, !" for priority</div>
+            <input type="text" id="taskInput" class="input-field" required autocomplete="off">
+            <label for="taskInput" class="label">Enter Task</label>
+            <div class="underline"></div>
+            <!--<div class="tooltip">Use "@HH:MM" for reminders | Use "!!!, !!, !" for priority</div>-->
+          </div>
+          
+
+        <div class="button-container">
+            <button id="datePickerBtn" class="date-btn">📅</button>
+            <input type="date" id="datePicker" style="display: none;">
+            <button id="addTask">Add Task</button>
         </div>
 
-        <button id="addTask">Add Task</button>
         <ul id="taskList"></ul>
+        
+        
     </div>
     
     <script src="app.js"></script>
