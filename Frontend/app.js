@@ -51,8 +51,24 @@ document.addEventListener("DOMContentLoaded", function () {
         taskText = taskText.replace(timeMatch[0], "").trim(); // Remove time from text
         scheduleAlarm(taskId, alarmTime, taskText);
       }
-  
-      createTaskElement(taskText, false, alarmTime, taskId);
+
+      let taskPriority = "!";
+      if (taskText.startsWith("!!!")) {
+        taskPriority = "!!!"
+        taskText = taskText.slice(3).trim()
+      } else if (taskText.startsWith("!!")) {
+        taskPriority = "!!"
+        taskText = taskText.slice(2).trim()
+      } else if (taskText.startsWith("!")) {
+        taskPriority = "!"
+        taskText = taskText.slice(1).trim()
+      } else {
+        console.log('No priority provided, default "!"')
+      }
+
+      console.log(`task added with priority: ${taskPriority}, for task ${taskText}`)
+
+      createTaskElement(taskText, false, alarmTime, taskId, taskPriority);
       taskInput.value = "";
       saveTasks();
     }
@@ -75,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   
     // Create a task element and add it to the list
-    function createTaskElement(text, completed = false, alarmTime = null, taskId = "") {
+    function createTaskElement(text, completed = false, alarmTime = null, taskId = "", priority = "!") {
       const li = document.createElement("li");
       li.dataset.taskId = taskId; // Attach the unique task ID
   
@@ -118,9 +134,26 @@ document.addEventListener("DOMContentLoaded", function () {
         saveTasks();
         updateClearCompletedButton();
       });
+
+      // Create priority display
+      const prioritySpan = document.createElement("span");
+      prioritySpan.textContent = priority + " ";
+      prioritySpan.classList.add("priority-label");
   
+      if (priority === "!!!") {
+        prioritySpan.style.color = "red";
+        prioritySpan.style.fontWeight = "bold";
+      } else if (priority === "!!") {
+        prioritySpan.style.color = "orange";
+        prioritySpan.style.fontWeight = "bold";
+      } else {
+        prioritySpan.style.color = "gray";
+      }
+
+
       // Assemble the task item
       li.appendChild(checkbox);
+      li.appendChild(prioritySpan);
       li.appendChild(taskSpan);
       li.appendChild(deleteBtn);
       taskList.appendChild(li);
@@ -135,10 +168,14 @@ document.addEventListener("DOMContentLoaded", function () {
     // Save tasks to localStorage
     function saveTasks() {
         const tasks = [];
+
         document.querySelectorAll("#taskList li").forEach(li => {
           const checkbox = li.querySelector(".task-checkbox");
           const taskSpan = li.querySelector(".task-text");
           const alarmSpan = taskSpan.querySelector(".alarm-time");
+          const prioritySpan = li.querySelector(".priority-label");
+          
+          const priority = prioritySpan ? prioritySpan.textContent.trim() : "!";
           const baseText = taskSpan.childNodes[0].nodeValue.trim();
           const alarmTime = alarmSpan
             ? alarmSpan.textContent.replace("⏰", "").trim()
@@ -148,12 +185,14 @@ document.addEventListener("DOMContentLoaded", function () {
             text: baseText,
             completed: checkbox.checked,
             alarmTime: alarmTime,
+            priority: priority,
             taskId: li.dataset.taskId
           });
         });
-        localStorage.setItem("carnereTasks", JSON.stringify(tasks));
         // Also save to chrome.storage.local
-        chrome.storage.local.set({ tasks });
+        chrome.storage.local.set({ tasks }, () => {
+          console.log("Tasks successfully saved to chrome.storage.local", tasks)
+        });
     }
       
   
@@ -161,9 +200,15 @@ document.addEventListener("DOMContentLoaded", function () {
     function loadTasks() {
         chrome.storage.local.get("tasks", (result) => {
           const tasks = result.tasks || [];
+
+          tasks.sort((a, b) => {
+            const priorityOrder = {"!!!": 3, "!!": 2, "!": 1}
+            return priorityOrder[b.priority] - priorityOrder[a.priority];
+          });
+
           taskList.innerHTML = "";
           tasks.forEach(task => {
-            createTaskElement(task.text, task.completed, task.alarmTime, task.taskId);
+            createTaskElement(task.text, task.completed, task.alarmTime, task.taskId, task.priority);
           });
         });
       }
