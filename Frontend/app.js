@@ -151,6 +151,10 @@ document.addEventListener("DOMContentLoaded", () => {
       chrome.alarms.create(taskId, { delayInMinutes });
       console.log(`Alarm set for "${taskText}" at ${time} on ${alarmDate.toISOString().split("T")[0]}`);
     }
+
+    chrome.storage.local.set({[taskId]: taskText}, () => {
+      console.log(`Task text stored for ${taskId}: ${taskText}`)
+    })
   }
 
   function createTaskElement(text, completed = false, alarmTime = null, taskId = "", priority = "!", deadline = null) {
