@@ -10,3 +10,7 @@ It helps you stay focused by managing tasks, setting reminders, and minimizing d
 - Automatic Task Syncing – Tasks are saved in `chrome.storage.local`, so they persist even when you close the extension.
 - Real-Time Updates – Tasks marked as complete via notifications update instantly in the UI.
 - Upcoming: Focus Mode – Block distracting websites to stay locked in.
+
+
+![Alt text](icons/test.png)
+![Alt text](icons/tooltip.png)
