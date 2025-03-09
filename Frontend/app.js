@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const addTaskBtn = document.getElementById("addTask");
   const taskList = document.getElementById("taskList");
 
-  // "Clear Completed" button
   const clearCompletedBtn = document.createElement("button");
   clearCompletedBtn.textContent = "Clear Completed";
   clearCompletedBtn.id = "clearCompleted";
@@ -11,66 +10,49 @@ document.addEventListener("DOMContentLoaded", () => {
   clearCompletedBtn.style.display = "none";
   document.querySelector(".container").appendChild(clearCompletedBtn);
 
-  // Date picker
   const datePickerBtn = document.getElementById("datePickerBtn");
   const datePicker = document.getElementById("datePicker");
   datePickerBtn.addEventListener("click", () => datePicker.showPicker());
-
-  datePicker.addEventListener("change", () => console.log("Selected date:", datePicker.value));
   datePicker.addEventListener("change", () => {
+    console.log("Selected date:", datePicker.value);
     taskInput.focus();
   });
-  const today = new Date().toISOString().split("T")[0];
-  datePicker.setAttribute("min", today);
+  const todayStr = new Date().toISOString().split("T")[0];
+  datePicker.setAttribute("min", todayStr);
 
-  // Tooltip button
+  // Info tooltip logic (if you have an info button/tooltip in your HTML)
   const infoButton = document.getElementById("infoButton");
   const tooltipBox = document.getElementById("tooltipBox");
   const closeTooltip = document.getElementById("closeTooltip");
-
-  // Toggle tooltip display
-  infoButton.addEventListener("click", () => {
+  if (infoButton && tooltipBox && closeTooltip) {
+    infoButton.addEventListener("click", () => {
       if (tooltipBox.style.display === "block") {
-          tooltipBox.style.opacity = "0";
-          setTimeout(() => {
-              tooltipBox.style.display = "none";
-          }, 200); // Smooth fade-out
+        tooltipBox.style.opacity = "0";
+        setTimeout(() => { tooltipBox.style.display = "none"; }, 200);
       } else {
-          tooltipBox.style.display = "block";
-          setTimeout(() => {
-              tooltipBox.style.opacity = "1";
-          }, 10); // Smooth fade-in
+        tooltipBox.style.display = "block";
+        setTimeout(() => { tooltipBox.style.opacity = "1"; }, 10);
       }
-  });
-
-  // Close tooltip when clicking outside of it
-  document.addEventListener("click", (event) => {
-      if (!tooltipBox.contains(event.target) && event.target !== infoButton) {
-          tooltipBox.style.opacity = "0";
-          setTimeout(() => {
-              tooltipBox.style.display = "none";
-          }, 200);
-      }
-  });
-
-  // Close button inside tooltip
-  closeTooltip.addEventListener("click", () => {
+    });
+    closeTooltip.addEventListener("click", () => {
       tooltipBox.style.opacity = "0";
-      setTimeout(() => {
-          tooltipBox.style.display = "none";
-      }, 200);
-  });
+      setTimeout(() => { tooltipBox.style.display = "none"; }, 200);
+    });
+    document.addEventListener("click", (event) => {
+      if (!tooltipBox.contains(event.target) && event.target !== infoButton) {
+        tooltipBox.style.opacity = "0";
+        setTimeout(() => { tooltipBox.style.display = "none"; }, 200);
+      }
+    });
+  }
 
-  loadTasks(); // Load saved tasks on startup
-
+  loadTasks();
   addTaskBtn.addEventListener("click", addTask);
   taskInput.addEventListener("keypress", e => {
     if (e.key === "Enter") addTask();
   });
-
   clearCompletedBtn.addEventListener("click", () => {
-    const completedTasks = document.querySelectorAll(".task-completed");
-    completedTasks.forEach(taskSpan => {
+    document.querySelectorAll(".task-completed").forEach(taskSpan => {
       const li = taskSpan.closest("li");
       if (li) li.remove();
     });
@@ -85,12 +67,9 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("Tasks Cannot Exceed 50 Characters.");
       return;
     }
-
-    // assign ID
     const taskId = "task-" + Date.now() + "-" + Math.floor(Math.random() * 1000);
     let deadlineDate = datePicker.value || new Date().toISOString().split("T")[0];
 
-    // Check for @HH:MM to set an alarm
     let alarmTime = null;
     const timeMatch = taskText.match(/@(0?[0-9]|1[0-9]|2[0-3]):([0-5][0-9])/);
     if (timeMatch) {
@@ -99,7 +78,6 @@ document.addEventListener("DOMContentLoaded", () => {
       scheduleAlarm(taskId, alarmTime, taskText, deadlineDate);
     }
 
-    // Extract priority
     let taskPriority = "!";
     if (taskText.startsWith("!!!")) {
       taskPriority = "!!!";
@@ -123,10 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const now = new Date();
     const alarmDate = new Date();
     alarmDate.setHours(hour, minute, 0, 0);
-
-    if (alarmDate < now) {
-      alarmDate.setDate(alarmDate.getDate() + 1);
-    }
+    if (alarmDate < now) alarmDate.setDate(alarmDate.getDate() + 1);
     const delayInMinutes = (alarmDate - now) / (1000 * 60);
     chrome.alarms.create(taskId, { delayInMinutes });
     console.log(`Alarm set for "${taskText}" at ${time}`);
@@ -137,7 +112,6 @@ document.addEventListener("DOMContentLoaded", () => {
     li.dataset.taskId = taskId;
     li.dataset.deadline = deadline || "";
     li.dataset.alarmTime = alarmTime || "";
-
     const taskSpan = document.createElement("span");
     taskSpan.textContent = text;
     taskSpan.className = "task-text";
@@ -178,27 +152,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const today = new Date().toISOString().split("T")[0];
     const showDate = deadline && deadline !== today && deadline !== "null";
     const showTime = alarmTime && alarmTime !== "";
-
     if (showDate || showTime) {
       const dateTimeSpan = document.createElement("span");
       dateTimeSpan.classList.add("deadline-time");
       dateTimeSpan.style.color = "gray";
       dateTimeSpan.style.fontSize = "0.9em";
       dateTimeSpan.style.marginLeft = "5px";
-
       let dateTimeString = "";
       if (showDate) dateTimeString += `🗓️ ${deadline}`;
       if (showTime) {
-        if (dateTimeString) {
-          dateTimeString += ` ⏰${alarmTime}`;
-        } else {
-          dateTimeString += `⏰ ${alarmTime}`;
-        }
+        dateTimeString += dateTimeString ? ` ⏰${alarmTime}` : `⏰ ${alarmTime}`;
       }
       dateTimeSpan.textContent = dateTimeString;
       taskSpan.appendChild(dateTimeSpan);
     }
-
     li.appendChild(checkbox);
     li.appendChild(prioritySpan);
     li.appendChild(taskSpan);
@@ -219,22 +186,19 @@ document.addEventListener("DOMContentLoaded", () => {
       const alarmTime = li.dataset.alarmTime || "";
       const priority = prioritySpan ? prioritySpan.textContent.trim() : "!";
       const baseText = taskSpan.childNodes[0].nodeValue.trim();
-
       tasks.push({
         text: baseText,
         completed: checkbox.checked,
-        priority: priority,
+        priority,
         taskId: li.dataset.taskId,
-        deadline: deadline,
-        alarmTime: alarmTime
+        deadline,
+        alarmTime
       });
     });
-
     tasks.sort((a, b) => {
       const priorityOrder = { "!!!": 3, "!!": 2, "!": 1 };
       return priorityOrder[b.priority] - priorityOrder[a.priority];
     });
-
     chrome.storage.local.set({ tasks }, () => {
       console.log("Tasks saved to chrome.storage.local", tasks);
       displaySortedTasks(tasks);
@@ -275,6 +239,26 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   }
+
+  function checkDeadlines() {
+    chrome.storage.local.get("tasks", (result) => {
+      const tasks = result.tasks || [];
+      const today = new Date().toISOString().split("T")[0];
+      tasks.forEach(task => {
+        if (task.deadline === today) {
+          chrome.notifications.create(task.taskId, {
+            type: "basic",
+            iconUrl: "icon.png",
+            title: "Task Due Today",
+            message: `"${task.text}" is due today!`,
+            priority: 2
+          });
+        }
+      });
+    });
+  }
+
+  checkDeadlines();
 
   function updateClearCompletedButton() {
     const hasCompletedTasks = document.querySelectorAll(".task-completed").length > 0;
