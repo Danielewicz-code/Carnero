@@ -23,6 +23,44 @@ document.addEventListener("DOMContentLoaded", () => {
   const today = new Date().toISOString().split("T")[0];
   datePicker.setAttribute("min", today);
 
+  // Tooltip button
+  const infoButton = document.getElementById("infoButton");
+  const tooltipBox = document.getElementById("tooltipBox");
+  const closeTooltip = document.getElementById("closeTooltip");
+
+  // Toggle tooltip display
+  infoButton.addEventListener("click", () => {
+      if (tooltipBox.style.display === "block") {
+          tooltipBox.style.opacity = "0";
+          setTimeout(() => {
+              tooltipBox.style.display = "none";
+          }, 200); // Smooth fade-out
+      } else {
+          tooltipBox.style.display = "block";
+          setTimeout(() => {
+              tooltipBox.style.opacity = "1";
+          }, 10); // Smooth fade-in
+      }
+  });
+
+  // Close tooltip when clicking outside of it
+  document.addEventListener("click", (event) => {
+      if (!tooltipBox.contains(event.target) && event.target !== infoButton) {
+          tooltipBox.style.opacity = "0";
+          setTimeout(() => {
+              tooltipBox.style.display = "none";
+          }, 200);
+      }
+  });
+
+  // Close button inside tooltip
+  closeTooltip.addEventListener("click", () => {
+      tooltipBox.style.opacity = "0";
+      setTimeout(() => {
+          tooltipBox.style.display = "none";
+      }, 200);
+  });
+
   loadTasks(); // Load saved tasks on startup
 
   addTaskBtn.addEventListener("click", addTask);

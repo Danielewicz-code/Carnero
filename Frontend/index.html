@@ -9,7 +9,22 @@
 <body>
     <div class="container">
         <h2>Carnero</h2>
+
+        <button id="infoButton" class="info-btn">?</button>
+
+        <div id="tooltipBox" class="tooltip-box">
+            <h3>How to Use Carnero</h3>
+            <p>- Add tasks normally.</p>
+            <p>- Use `!!!, !!, !` for priority.</p>
+            <p>- Add `@HH:MM` for reminders.</p>
+            <p>- Select a date for deadlines.</p>
+            <p>- Click "X" to delete tasks.</p>
+            <button id="closeTooltip">Close</button>
+        </div>
+
         <br>
+
+
         <div class="input-container">
             <input type="text" id="taskInput" class="input-field" required autocomplete="off">
             <label for="taskInput" class="label">Enter Task</label>

@@ -264,3 +264,122 @@ li {
     color: #4caf50;
     margin: 10px 0;
 }
+
+/* Info Button */
+.info-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 25px;
+    height: 25px;
+    font-size: 14px;
+    font-weight: bold;
+    background: #37474f;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.info-btn:hover {
+    background: #546e7a;
+}
+
+/* Info Button */
+.info-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 30px;
+    height: 30px;
+    background: #263238;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s, transform 0.2s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.info-btn:hover {
+    background: #546e7a;
+    transform: scale(1.1);
+}
+
+/* Tooltip Box */
+.tooltip-box {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    background: #1e1e1e;
+    padding: 20px;
+    width: 280px;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    text-align: left;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Active tooltip state */
+.tooltip-box.active {
+    display: block;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* Tooltip Title */
+.tooltip-box h3 {
+    margin-bottom: 10px;
+    color: #bbdefb;
+    font-size: 18px;
+    text-align: center;
+    border-bottom: 1px solid #444;
+    padding-bottom: 8px;
+}
+
+/* Tooltip Content */
+.tooltip-box p {
+    font-size: 14px;
+    color: #ccc;
+    margin: 8px 0;
+    line-height: 1.5;
+}
+
+/* Close Button */
+.tooltip-box button {
+    width: 100%;
+    margin-top: 12px;
+    padding: 8px;
+    background: #1976d2;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+.tooltip-box button:hover {
+    background: #1e88e5;
+}
+
+/* Smooth Fade-in */
+@keyframes fadeInTooltip {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
