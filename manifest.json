@@ -1,7 +1,7 @@
 {
-  "manifest_version": 3,
+  "manifest_version": 4,
   "name": "Carnero",
-  "version": "1.0",
+  "version": "2.0",
   "description": "Stay focused and get things done with Carnero—your smart to-do list with reminders, and focus tools.",
   "background": {
     "service_worker": "Frontend/background.js"
