@@ -1,4 +1,4 @@
-# Todo-shit-app
+# Carnero - Chrome extension
 
 A minimalist yet powerful task manager Chrome extension designed for pure productivity.  
 It helps you stay focused by managing tasks, setting reminders, and minimizing distractions with a focus mode.
